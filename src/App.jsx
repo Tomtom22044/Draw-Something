@@ -45,12 +45,8 @@ export default function App() {
   const [isShake, setIsShake] = useState(false);
 
   useEffect(() => {
-    // When in production, connect to the exact origin where it is hosted (Render)
-    const socketUrl = import.meta.env.PROD
-      ? window.location.origin
-      : `http://${window.location.hostname}:3001`;
-
-    const newSocket = io(socketUrl);
+    // Rely on the same origin. Handled by Vite proxy in dev, and Express directly in prod!
+    const newSocket = io("/");
     setSocket(newSocket);
 
     newSocket.on('room_created', (id) => {
