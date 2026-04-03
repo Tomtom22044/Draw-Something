@@ -2,9 +2,18 @@ import express from 'express';
 import { createServer } from 'http';
 import { Server } from 'socket.io';
 import cors from 'cors';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const app = express();
 app.use(cors());
+
+// Serve static compiled Vite frontend files from 'dist' directory
+app.use(express.static(path.join(__dirname, 'dist')));
+
 const server = createServer(app);
 const io = new Server(server, {
     cors: { origin: '*' },
@@ -66,7 +75,7 @@ io.on('connection', (socket) => {
     });
 
     socket.on('disconnect', () => {
-        // If a player disconnects, let's just clean up rooms containing them
+        // If a player disconnects, clean up rooms containing them
         for (const [id, r] of Object.entries(rooms)) {
             if (r.p1 === socket.id || r.p2 === socket.id) {
                 socket.to(id).emit('player_disconnected');
@@ -76,6 +85,14 @@ io.on('connection', (socket) => {
     });
 });
 
-server.listen(3001, () => {
-    console.log('Socket server running on port 3001');
+// Any unmatched route will serve the index.html so React Router works
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, 'dist/index.html'));
+});
+
+// Use process.env.PORT provided by Render, else fallback to 3001
+const PORT = process.env.PORT || 3001;
+
+server.listen(PORT, () => {
+    console.log(`Server is running and listening on port ${PORT}`);
 });

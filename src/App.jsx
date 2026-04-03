@@ -45,8 +45,12 @@ export default function App() {
   const [isShake, setIsShake] = useState(false);
 
   useEffect(() => {
-    // Connect to same host, port 3001
-    const newSocket = io(`http://${window.location.hostname}:3001`);
+    // When in production, connect to the exact origin where it is hosted (Render)
+    const socketUrl = import.meta.env.PROD
+      ? window.location.origin
+      : `http://${window.location.hostname}:3001`;
+
+    const newSocket = io(socketUrl);
     setSocket(newSocket);
 
     newSocket.on('room_created', (id) => {
