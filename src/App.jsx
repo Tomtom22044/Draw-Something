@@ -421,7 +421,7 @@ function DrawingBoard({ word, onFinish }) {
         <button className="action-btn" onClick={handleClear} title="Clear">🗑️</button>
       </div>
 
-      <button className="btn btn-success" style={{ marginTop: 'auto' }} onClick={() => onFinish(canvasRef.current.toDataURL())}>
+      <button className="btn btn-success" style={{ marginTop: 'auto' }} onClick={() => onFinish(canvasRef.current.toDataURL('image/jpeg', 0.5))}>
         סיימתי לצייר
       </button>
     </div>
