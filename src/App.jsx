@@ -188,64 +188,64 @@ export default function App() {
   return (
     <div className="app-container">
       <div className="header">
-        <div>צייר משהו</div>
-        <div className="coins-display">💰 {score}</div>
+        <div>צייר פליי</div>
+        <div className="coins-display">💎 {score}</div>
       </div>
 
-      {errorObj && <div style={{ background: 'red', color: 'white', padding: '1rem', textAlign: 'center' }}>{errorObj}</div>}
+      {errorObj && <div style={{ background: '#ff416c', color: 'white', padding: '1rem', textAlign: 'center', fontWeight: 'bold' }}>{errorObj}</div>}
 
       {phase === 'start' && (
         <div className="screen">
-          <h1 className="title">צייר<br />משהו!</h1>
-          <button className="btn btn-primary" onClick={createGame}>צור חדר חבר</button>
+          <h1 className="title">PLAY!</h1>
+          <button className="btn btn-primary" onClick={createGame}>צור חדר</button>
           <button className="btn btn-success" onClick={joinMenu}>הצטרף לחדר</button>
         </div>
       )}
 
       {phase === 'lobby' && (
         <div className="screen">
-          <h1 className="title">קוד החדר:</h1>
-          <h1 style={{ fontSize: '4rem', letterSpacing: '8px', color: 'var(--primary)', marginBottom: '2rem' }}>{roomId}</h1>
-          <h2>מחכה לשחקן השני שיצטרף...</h2>
+          <h1 className="title">קוד חדר</h1>
+          <h1 style={{ fontSize: '4rem', letterSpacing: '8px', color: '#ffc900', marginBottom: '2rem', textShadow: '0 4px 6px rgba(0,0,0,0.5)' }}>{roomId}</h1>
+          <h2 style={{ opacity: 0.8 }}>מחכה לשחקן השני...</h2>
         </div>
       )}
 
       {phase === 'join' && (
         <div className="screen">
-          <h1 className="title">הכנס קוד:</h1>
+          <h1 className="title">הכנס קוד</h1>
           <input
             type="text"
             value={joinCode}
             onChange={(e) => setJoinCode(e.target.value)}
-            style={{ fontSize: '2rem', padding: '1rem', textAlign: 'center', marginBottom: '1rem', borderRadius: '8px', border: '2px solid var(--primary)' }}
+            style={{ fontSize: '2.5rem', padding: '1rem', width: '100%', maxWidth: '300px', fontWeight: 'bold', background: '#e1f5fe', color: '#054884', textAlign: 'center', marginBottom: '1.5rem', borderRadius: '16px', border: '6px solid #62c2f4', outline: 'none' }}
           />
-          <button className="btn btn-success" onClick={submitJoin}>הצטרף</button>
-          <button className="btn" style={{ marginTop: '1rem' }} onClick={() => setPhase('start')}>חזור</button>
+          <button className="btn btn-success" onClick={submitJoin}>הצטרף משחק</button>
+          <button className="btn" onClick={() => setPhase('start')}>חזור</button>
         </div>
       )}
 
       {phase === 'waiting_for_drawer' && (
         <div className="screen">
-          <h2 style={{ textAlign: 'center', opacity: 0.8 }}>השחקן השני בוחר מילה לציור...</h2>
-          <div style={{ marginTop: '2rem' }} className="loader">⏳</div>
+          <h1 className="title">המתן</h1>
+          <h2 style={{ textAlign: 'center', opacity: 0.9 }}>השחקן השני בוחר מילה לציור...</h2>
         </div>
       )}
 
       {phase === 'drawing_progress' && (
         <div className="screen">
-          <h2 style={{ textAlign: 'center', color: 'var(--primary)', fontWeight: 'bold' }}>השחקן השני מצייר עכשיו!</h2>
-          <h3 style={{ textAlign: 'center', marginTop: '1rem' }}>הכן את עצמך לנחש...</h3>
-          <div style={{ marginTop: '2rem' }} className="loader">🎨</div>
+          <h1 className="title">ציור בדרך!</h1>
+          <h2 style={{ textAlign: 'center', color: '#ffc900' }}>השחקן השני מצייר!</h2>
+          <p style={{ textAlign: 'center', marginTop: '1rem', opacity: 0.8 }}>הכן את עצמך לנחש...</p>
         </div>
       )}
 
       {phase === 'select' && (
         <div className="screen">
-          <h2 style={{ marginBottom: '2rem' }}>בחר מילה לציור:</h2>
+          <h1 className="title">רמת קושי</h1>
           {options.map((opt, i) => (
             <div key={i} className={`word-card ${opt.diff}`} onClick={() => handleSelectWord(opt)}>
               <div className="word-text">{opt.w}</div>
-              <div className="points-text">💰 {opt.c} מטבעות</div>
+              <div className="points-text">+ {opt.c} 💎</div>
             </div>
           ))}
         </div>
@@ -257,14 +257,16 @@ export default function App() {
 
       {phase === 'waiting_for_guess' && (
         <div className="screen">
-          <h1 className="title">סיימת לצייר!</h1>
-          <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>מחכה שהשחקן השני ינחש את המילה...</h2>
+          <h1 className="title">ממתין</h1>
+          <h2 style={{ textAlign: 'center', marginBottom: '2rem' }}>השחקן השני מנחש את הציור שלך!</h2>
         </div>
       )}
 
       {phase === 'guess' && (
-        <div className="screen">
-          <div className="canvas-container" style={{ boxShadow: 'none' }}>
+        <div className="screen" style={{ padding: '2.5rem 1rem 1rem 1rem' }}>
+          <h1 className="title" style={{ marginTop: '-4.5rem' }}>נחש!</h1>
+
+          <div className="canvas-container">
             <img src={drawingData} alt="Drawing" className="drawing-image" />
           </div>
 
@@ -299,14 +301,17 @@ export default function App() {
 
       {phase === 'result' && (
         <div className="screen">
+          <h1 className="title">YOU WIN!</h1>
           <div className="result-card">
-            <h1 className="title" style={{ fontSize: '2.5rem' }}>כל הכבוד!</h1>
-            <h2 style={{ marginBottom: '1rem' }}>המילה הייתה:<br /><span style={{ fontSize: '3rem', color: 'var(--primary)' }}>{lastWin.word}</span></h2>
-            <div className="coins-display" style={{ justifyContent: 'center', fontSize: '1.5rem', marginBottom: '2rem' }}>
-              +💰 {lastWin.points} מטבעות
+            <h2 style={{ marginBottom: '1rem' }}>המילה הייתה:</h2>
+            <div style={{ fontSize: '3.5rem', fontWeight: 800, color: '#ffc900', textShadow: '0 4px 6px rgba(0,0,0,0.5)', marginBottom: '1rem' }}>{lastWin.word}</div>
+
+            <div className="coins-display" style={{ padding: '0.8rem 2rem', fontSize: '1.5rem', marginBottom: '2rem' }}>
+              + {lastWin.points} 💎
             </div>
+
             <button className="btn btn-success" onClick={nextTurn}>
-              {role === 'drawer' ? 'תורי לצייר!' : 'מחכה שהחקן השני יבחר מילה...'}
+              {role === 'drawer' ? 'תורי לצייר!' : 'המשך!'}
             </button>
           </div>
         </div>
@@ -387,10 +392,8 @@ function DrawingBoard({ word, onFinish }) {
   };
 
   return (
-    <div className="screen" style={{ padding: '1rem', justifyContent: 'flex-start' }}>
-      <h3 style={{ marginBottom: '1rem', fontWeight: 600 }}>
-        צייר: <span style={{ color: 'var(--primary)', fontWeight: 800 }}>{word}</span>
-      </h3>
+    <div className="screen" style={{ padding: '2.5rem 1rem 1rem 1rem', justifyContent: 'flex-start' }}>
+      <h1 className="title" style={{ marginTop: '-4.5rem' }}>צייר: {word}</h1>
 
       <div className="canvas-container">
         <canvas
@@ -422,7 +425,7 @@ function DrawingBoard({ word, onFinish }) {
       </div>
 
       <button className="btn btn-success" style={{ marginTop: 'auto' }} onClick={() => onFinish(canvasRef.current.toDataURL('image/jpeg', 0.5))}>
-        סיימתי לצייר
+        סיימתי
       </button>
     </div>
   );
